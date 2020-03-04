@@ -8,6 +8,7 @@ Zoek naar de plekken waar je een wachtwoord in moet vullen met ctrl+f password
 
 import pymongo
 import psycopg2  # Module om met PostgreSQL te communiceren
+import random
 
 
 
@@ -24,7 +25,7 @@ def get_products_mongo():
 
 def insert_into_postgres(values):
     try:
-        connection = psycopg2.connect("dbname=voordeelshop user=postgres password=")
+        connection = psycopg2.connect(dbname='voordeelshop', user='postgres', password='', port=5432)
         cursor = connection.cursor()
 
         postgres_insert_query = """ INSERT INTO product VALUES(%s,%s,%s,%s)"""
@@ -36,7 +37,6 @@ def insert_into_postgres(values):
         print(count, "Record inserted successfully into mobile table")
 
     except (Exception, psycopg2.Error) as error:
-        if(connection):
             print("Failed to insert record into mobile table", error)
 
 
@@ -44,12 +44,42 @@ a_ = input("Staat de data al in je postgresql?(J/N):")
 if a_ == 'N' or a_ == 'n':
     get_products_mongo()
 
+def get_random_item_postgres():
+    try:
+        connection = psycopg2.connect(dbname='voordeelshop', user='postgres', password='', port=5432)
+        cursor = connection.cursor()
+
+        postgres_select_query = """SELECT productname, price FROM product"""
+        cursor.execute(postgres_select_query)
+        product_price_records = cursor.fetchall()
+
+
+    except (Exception, psycopg2.Error) as error:
+        print("Failed to insert record into mobile table", error)
+
+    prod_price_dict = {}
+    for item in product_price_records:
+        prod_price_dict[item[0]] = item[1]
+
+    random_name, random_price = random.choice(list(prod_price_dict.items()))
+    diff_dict = {}
+
+    for prod_name, price in prod_price_dict.items():
+        diff = abs(random_price - price)
+        diff_dict[prod_name] = diff
+
+    max_diff = max(diff_dict.values())
+    list_of_prods = []
+    for k,v in diff_dict.items():
+         if v == max_diff:
+             list_of_prods.append(k)
+
+    print('Producten met het grootste verschil: {}'.format(list_of_prods))
+
 
 def opdracht_2():
     try:
-        connection = psycopg2.connect("dbname=voordeelshop user=postgres password=")
-        cursor = connection.cursor()
-
+        connection = psycopg2.connect(dbname='voordeelshop', user='postgres', password='', port=5432)
         cursor = connection.cursor()
         postgreSQL_select_Query = "select Price from Product"
 
@@ -61,12 +91,11 @@ def opdracht_2():
         for row in price_records:
             total += row[0]
             b += 1
-        print("Gemiddelde prijs is"+str(total/b))
+        print("Gemiddelde prijs is "+str(total/b))
 
 
     except (Exception, psycopg2.Error) as error:
-        if (connection):
             print("Failed to insert record into mobile table", error)
 
-
 opdracht_2()
+get_random_item_postgres()
