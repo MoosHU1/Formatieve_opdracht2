@@ -1,6 +1,5 @@
 '''
 Bron 1: https://pynative.com/python-postgresql-insert-update-delete-table-data-to-perform-crud-operations/#Python_PostgreSQL_INSERT_into_database_Table
-
 LET OP
 Het wachtwoord van je PostgreSQL moet je zelf invullen, anders werkt het niet
 Zoek naar de plekken waar je een wachtwoord in moet vullen met ctrl+f password
