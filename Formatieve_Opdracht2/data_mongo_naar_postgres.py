@@ -10,18 +10,19 @@ def get_data_mongo():
     colom_profile = database["profiles"]
     colom_session = database["sessions"]
 
-    products = colom_product.find().limit(1)
-    profiles = colom_profile.find().limit(1)
-    sessions = colom_session.find().limit(1)
+    products = colom_product.find().limit(10)
+    profiles = colom_profile.find().limit(10)
+    sessions = colom_session.find().limit(10)
 
     for i in products:
         insert_products_into_postgres("product", (i["_id"], i["gender"], i["name"], i["price"]["selling_price"]))
 
-    for i in profiles:
-        insert_products_into_postgres("product", i[""])
 
     for i in profiles:
-        insert_products_into_postgres("session", i[""])
+        insert_products_into_postgres("profile", (i["buids"][0],))
+
+    for i in sessions:
+        insert_products_into_postgres("session", (i["_id"], i["buid"][0]))
 
 def insert_products_into_postgres(table, values):
     try:
@@ -35,7 +36,7 @@ def insert_products_into_postgres(table, values):
             cursor.execute("""INSERT INTO profile VALUES(%s)""", values)
 
         if table == "session":
-            cursor.execute("""INSERT INTO profile VALUES(%s,&s)""", values)
+            cursor.execute("""INSERT INTO session_ VALUES(%s,%s)""", values)
 
 
         connection.commit()

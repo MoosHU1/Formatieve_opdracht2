@@ -2,7 +2,7 @@ import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 # Connect to PostgreSQL DBMS
-con = psycopg2.connect("dbname = voordeelshop user=postgres password=''")
+con = psycopg2.connect("dbname = voordeelshop user=postgres password='okinawa'")
 con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 
 # Obtain a DB Cursor
@@ -32,8 +32,8 @@ def create_tables():
         (
           SessionID varchar,
           BrowserID varchar,
-          PRIMARY KEY (SessionID),
-          FOREIGN KEY (BrowserID) REFERENCES profile(BrowserID)
+          PRIMARY KEY (SessionID)
+         
         )
         ''')
 
