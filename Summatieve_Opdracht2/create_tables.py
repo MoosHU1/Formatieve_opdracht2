@@ -32,8 +32,8 @@ def create_tables():
         (
           SessionID varchar,
           BrowserID varchar,
-          PRIMARY KEY (SessionID)
-         
+          PRIMARY KEY (SessionID),
+          FOREIGN KEY (BrowserID) references Profile(BrowserID)
         )
         ''')
 
