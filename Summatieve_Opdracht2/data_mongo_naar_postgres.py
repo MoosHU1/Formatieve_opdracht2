@@ -1,3 +1,9 @@
+"""
+Bron 1: https://stackoverflow.com/questions/13793399/passing-table-name-as-a-parameter-in-psycopg2
+Bron 2: https://www.postgresqltutorial.com/postgresql-python/insert/
+
+"""
+
 import pymongo
 import psycopg2  # Module om met PostgreSQL te communiceren
 
@@ -22,7 +28,7 @@ def get_data_mongo():
         loop+=1
         if loop%10 == 0:
             print(loop,"Profiles inserted into database")
-        try:
+        try:    # Try except statement wegens profielen zonder browserid
             for j in range(len(i["buids"])):
                 insert_products_into_postgres("profile", (i["buids"][j],))
         except:
@@ -37,7 +43,7 @@ def insert_products_into_postgres(table, values):
         connection = psycopg2.connect("dbname = voordeelshop user=postgres password=''")
         cursor = connection.cursor()
 
-        #   Table kan geen variabele zijn, daarom 3 if statements
+        #   Table kan geen variabele zijn, daarom 3 if statements. Zie bron 1.
         if table == "product":
             cursor.execute("""INSERT INTO product VALUES(%s,%s,%s,%s)""",values)
 
