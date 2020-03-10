@@ -16,18 +16,27 @@ def get_data_mongo():
     colom_profile = database["profiles"]
     colom_session = database["sessions"]
 
-    products = colom_product.find().limit(10)
-    profiles = colom_profile.find().limit(1000)
-    sessions = colom_session.find().limit(1000)
+    products = colom_product.find().limit(100)
+    profiles = colom_profile.find().limit(100)
+    sessions = colom_session.find().limit(100)
+
+    categories = set()
+    brands = set()
+
 
     for i in products:
-        insert_products_into_postgres("product", (i["_id"], i["gender"], i["name"], i["price"]["selling_price"]))
+        if i["category"] is not None and i["category"] not in categories:
+            categories.add(i["category"])
+            insert_products_into_postgres("category", (i["category"],))
 
-    loop =0
+        if i["brand"] is not None and i["brand"] not in brands:
+            brands.add(i["brand"])
+            insert_products_into_postgres("brand", (i["brand"],))
+
+        insert_products_into_postgres("product", (i["_id"], i["category"], i["brand"], i["gender"], i["name"], i["price"]["selling_price"]))
+
+
     for i in profiles:
-        loop+=1
-        if loop%10 == 0:
-            print(loop,"Profiles inserted into database")
         try:    # Try except statement wegens profielen zonder browserid
             for j in range(len(i["buids"])):
                 insert_products_into_postgres("profile", (i["buids"][j],))
@@ -44,8 +53,14 @@ def insert_products_into_postgres(table, values):
         cursor = connection.cursor()
 
         #   Table kan geen variabele zijn, daarom 3 if statements. Zie bron 1.
+        if table == "category":
+            cursor.execute("""INSERT INTO category VALUES(%s)""",values)
+
+        if table == "brand":
+            cursor.execute("""INSERT INTO brand VALUES(%s)""",values)
+
         if table == "product":
-            cursor.execute("""INSERT INTO product VALUES(%s,%s,%s,%s)""",values)
+            cursor.execute("""INSERT INTO product VALUES(%s,%s,%s,%s,%s,%s)""",values)
 
         if table == "profile":
             cursor.execute("""INSERT INTO profile VALUES(%s)""", values)

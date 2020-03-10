@@ -12,8 +12,10 @@ cursor = con.cursor()
 def delete_records():
     commands = (
         """DELETE FROM product""",
-        """DELETE FROM profile""",
-        """DELETE FROM session_"""
+        """DELETE FROM category""",
+        """DELETE FROM brand""",
+        """DELETE FROM session_""",
+        """DELETE FROM profile"""
         )
 
     try:

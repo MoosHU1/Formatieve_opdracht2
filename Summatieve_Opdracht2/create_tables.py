@@ -11,13 +11,31 @@ cursor = con.cursor()
 def create_tables():
     commands = (
         '''
+        CREATE TABLE brand
+        (
+            Brand varchar,
+            PRIMARY KEY(Brand)
+        )
+        ''',
+        '''
+        CREATE TABLE category
+        (
+            Category varchar,
+            PRIMARY KEY(Category)
+        )
+        ''',
+        '''
         CREATE TABLE Product
         (
           ProductID varchar,
+          Category varchar,
+          Brand varchar,
           GenderID  varchar,
           ProductName  varchar,
           Price numeric,
-          PRIMARY KEY (ProductID)	
+          PRIMARY KEY (ProductID),
+          FOREIGN KEY (Category) REFERENCES category(Category),
+          FOREIGN KEY (Brand) REFERENCES brand(Brand)
         )
         ''',
         '''
