@@ -1,19 +1,11 @@
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
-# Connect to PostgreSQL DBMS
-con = psycopg2.connect("dbname = voordeelshop user=postgres password=''")
-con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-
-# Obtain a DB Cursor
-cursor = con.cursor()
-
 def create_tables():
     commands = (
         '''
         CREATE TABLE brand
-        (
-            Brand varchar,
+        (Brand varchar,
             PRIMARY KEY(Brand)
         )
         ''',
@@ -67,4 +59,13 @@ def create_tables():
     finally:
         if con is not None:
             con.close()
-create_tables()
+            
+            
+if __name__ == "__main__":   
+    # Connect to PostgreSQL DBMS
+    con = psycopg2.connect("dbname = voordeelshop user=postgres password=''")
+    con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+    
+    # Obtain a DB Cursor
+    cursor = con.cursor()
+    create_tables()
