@@ -1,13 +1,6 @@
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
-# Connect to PostgreSQL DBMS
-con = psycopg2.connect("dbname = voordeelshop user=postgres password=''")
-con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-
-# Obtain a DB Cursor
-cursor = con.cursor()
-
 
 def delete_records():
     commands = (
@@ -33,4 +26,12 @@ def delete_records():
             con.close()
 
 
-delete_records()
+if __name__ == "__main__":
+    # Connect to PostgreSQL DBMS
+    con = psycopg2.connect("dbname = voordeelshop user=postgres password=''")
+    con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+    
+    # Obtain a DB Cursor
+    cursor = con.cursor()
+    
+    delete_records()
